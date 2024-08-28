@@ -1,4 +1,16 @@
-Flask==2.3.4
-google-generativeai==0.0.3
-pyttsx3==2.90
-speech_recognition==3.10.0
+Flask==3.0.3
+google-generativeai==0.0.1  # Replace with the actual version if different
+requests==2.32.3
+httpx==0.27.0
+pycryptodomex==3.20.0
+mutagen==1.47.0
+pytube==15.0.0
+h11==0.14.0
+httpcore==1.0.5
+websockets==12.0
+Werkzeug==3.0.3
+itsdangerous==2.2.0
+Jinja2==3.1.4
+MarkupSafe==2.1.5
+re  # Standard library, no need to include
+textwrap  # Standard library, no need to include
