@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis Voice Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        #chat-container {
+            width: 60%;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #response {
+            margin-top: 20px;
+        }
+        #text-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        #send-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #send-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <h2>Jarvis Voice Chat</h2>
+        <textarea id="text-input" rows="3" placeholder="Type your message here..."></textarea>
+        <button id="send-btn">Send</button>
+        <div id="response"></div>
+    </div>
+
+    <script>
+        // Speech Recognition Setup
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.continuous = true;  // Enable continuous listening
+
+        // Automatically start listening when the page loads
+        recognition.start();
+
+        recognition.addEventListener('result', (event) => {
+            const transcript = event.results[event.results.length - 1][0].transcript;
+            sendMessage(transcript);
+        });
+
+        recognition.addEventListener('end', () => {
+            // Restart recognition after it ends to keep it listening continuously
+            recognition.start();
+        });
+
+        // Send message to backend and get response
+        function sendMessage(userMessage) {
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: userMessage }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('response').innerText = data.response;
+                speak(data.response);  // Call the speak function to read out the response
+            });
+        }
+
+        // Text box input handling
+        document.getElementById('send-btn').addEventListener('click', () => {
+            const userMessage = document.getElementById('text-input').value;
+            if (userMessage) {
+                sendMessage(userMessage);
+                document.getElementById('text-input').value = '';  // Clear text box
+            }
+        });
+
+        // Speech Synthesis (Voice Output)
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>
