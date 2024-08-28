@@ -1,5 +1,5 @@
 Flask==3.0.3
-google-generativeai==0.0.1  # Replace with the actual version if different
+google-generativeai==0.7.2  # Replace with the actual version if different
 requests==2.32.3
 httpx==0.27.0
 pycryptodomex==3.20.0
