@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 import google.generativeai as genai
-import re
-import textwrap
+
 
 app = Flask(__name__)
 
